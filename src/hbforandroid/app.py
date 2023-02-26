@@ -7,13 +7,14 @@ from toga.fonts import Font, SANS_SERIF
 from toga.style.pack import CENTER, COLUMN, ROW
 import requests
 import os
+import re
 
 
 class Homebrew(toga.App):
     self_ = None
     console_input = None
     main_window_ = None
-    default_repo = 'http://repo.example.com'
+    default_repo = 'http://192.168.0.148:5000' # this will be changed later (i'll register a domain)
 
     def startup(self):
 
@@ -67,9 +68,11 @@ class Homebrew(toga.App):
         # getting the values of console
         input = Homebrew.console_input
         pkg = input.value
+        pkg = pkg.lower()
         input.clear()
 
         # some checks before attempting to install the package
+        regex = re.compile("[A-Za-z0-9 ]+")
         if pkg == '':
             Homebrew.main_window_.info_dialog('No package name was entered', 'You need to input a package name')
             return
@@ -78,14 +81,9 @@ class Homebrew(toga.App):
             Homebrew.main_window_.info_dialog('Package name too long', 'The package name you\'ve entered is too long.')
             return
 
-        if pkg.isalnum().replace(' ', '') != True:
+        if regex.fullmatch(pkg) == None:
             Homebrew.main_window_.info_dialog('Package name is invalid', 'You\'ve entered an invalid package name (Only letters and numbers are allowed)')
             return
-
-        if pkg == self.formal_name:
-            update_dia = Homebrew.main_window_.confirm_dialog('Update', 'Are you sure you want to update '+ self.formal_name + '?')
-            if update_dia != True:
-                return
 
         # main box for the window
         install_box = toga.Box(style=Pack(
@@ -104,10 +102,11 @@ class Homebrew(toga.App):
         self.install_window.content = install_box
         self.install_window.show()
 
+        # adds an update to console
         def addlabeltoconsole(t):
             text_box = toga.Box(style=Pack(
-                direction=COLUMN, background_color='#FFFFFF'))
-            text_box.add(toga.Label(t))
+                direction=COLUMN))
+            text_box.add(toga.Label(t, style=Pack(color='#FFFFFF')))
             info_box.add(text_box)
             # refreshes the window
             self.install_window.content = install_box
@@ -137,8 +136,8 @@ class Homebrew(toga.App):
             addlabeltoconsole('An error has occured. '+str(e))
 
         confirm_box = toga.Box(style=Pack(
-            direction=COLUMN, background_color='#FFFFFF'))
-        confirm_box.add(toga.Button('Close'))
+            direction=COLUMN))
+        confirm_box.add(toga.Button('Close', style=Pack(color='#FFFFFF')))
         install_box.add(confirm_box)
         self.install_window.content = install_box
 
