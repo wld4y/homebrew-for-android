@@ -1,0 +1,11 @@
+Metadata-Version: 2.1
+Briefcase-Version: 0.3.12
+Name: hbforandroid
+Formal-Name: Homebrew
+App-ID: com.wideey.hbforandroid
+Version: 0.0.1
+Home-page: https://github.com/wideey/homebrew-for-android
+Download-URL: https://github.com/wideey/homebrew-for-android
+Author: Isaac Dilley
+Author-email: isaac.dill3y@gmail.com
+Summary: Package manager for Android.

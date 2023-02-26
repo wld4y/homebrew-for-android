@@ -1,1 +1,3 @@
 requests
+-i https://chaquo.com/pypi/simple/
+chaquopy-android>=10.0.0
